@@ -7,9 +7,9 @@ import java.net.UnknownHostException;
 
 public class ConnectionAvailability {
 
-    public static boolean isWebsiteReachable(String website) {
+    public boolean isNetworkReachable() {
         try {
-            URL url = new URL(website);
+            URL url = new URL("https://google.com/");
 
             HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
 
