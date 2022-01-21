@@ -7,35 +7,60 @@ public class WeatherProgram {
     public void start() {
 
         Scanner input = new Scanner(System.in);
-        System.out.println("Для выхода введите finish. \nВведите название города: ");
-        ConnectionAvailability checkConnection = new ConnectionAvailability();
+        ListCities cities = new ListCities();
+        CheckListCities check = new CheckListCities();
 
         while (true) {
-            if (!checkConnection.isNetworkReachable()) {
-                System.out.println("Нет подключения к интернету");
-                break;
-            } else {
-                if (input.hasNext()) {
-                    String cityName = input.next();
+            System.out.println("Для выхода введите finish. \n" +
+                               "Для вывода истории запросов городов введите list. \n" +
+                               "Введите название города: ");
 
-                    if (cityName.equals("finish")) {
-                        break;
+            if (input.hasNextInt()) {
+                int listIndex = input.nextInt();
+                if (check.isListEmpty(cities)){
+                    System.out.println("Список истории запросов пуст.\n");
+                } else if (check.isIndexOutOfBounds(listIndex, cities)){
+                    System.out.println("Введён не верный индекс города. В истории запроса такого города нет.\n");
+                } else {
+                System.out.println(cities.getCityWeather(listIndex));
+                }
+
+            } else if (input.hasNext()) {
+                String cityName = input.next();
+
+                if (cityName.equals("finish")) {
+                    break;
+
+                } else if (cityName.equals("list")) {
+                    if (check.isListEmpty(cities)){
+                        System.out.println("Список истории запросов пуст.");
+                    }
+                    System.out.println(cities.getListCities());
+
+                } else {
+                    ConnectionAvailability checkConnection = new ConnectionAvailability();
+                    UrlContent cityInfo = new UrlContent();
+                    ParseJson jsonCity = new ParseJson();
+
+                    if (!checkConnection.isNetworkReachable()) {
+                        System.out.println("Нет подключения к интернету\n");
                     } else {
-                        UrlContent cityInfo = new UrlContent();
 
-                        if (cityInfo.getUrlContent(cityName).equals("Такой город не был найден!")) {
+                        if (cityInfo.getUrlContent(cityName).equals("Такой город не был найден!\n")) {
                             System.out.println(cityInfo.getUrlContent(cityName));
-                            System.out.println();
-                            System.out.println("Для выхода введите finish. \nВведите название города: ");
+
                         } else {
-                            Cities city = new Cities(cityName);
-                            if (cityInfo.isJsonObjectCorrect(cityName)) {
-                                System.out.println(city.getWeather(cityName));
+
+                            if (jsonCity.isJsonObjectCorrect(cityName)) {
+                                City city = new City(jsonCity);
+                                if (check.isNoCityInList(city, cities)){
+                                cities.setListCities(city);
+                                }
+                                System.out.println(city.getWeather());
+
                             } else {
-                                System.out.println("Ошибка: ответ сервера не в поном объеме или содержит ошибку");
+                                System.out.println("Ошибка: ответ сервера не в поном объеме или содержит ошибку\n");
                             }
-                            System.out.println();
-                            System.out.println("Для выхода введите finish. \nВведите название города: ");
                         }
                     }
                 }
