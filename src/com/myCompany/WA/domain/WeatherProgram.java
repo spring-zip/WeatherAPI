@@ -28,6 +28,8 @@ public class WeatherProgram {
 
                 if (cityName.equals("list")) {
                     view.listCities(cities);
+                } else if (!checkConnection.isNetworkReachable()) {
+                    System.out.println("Нет подключения к интернету\n");
                 } else {
                     if (jsonObject.isJsonObjectCorrect(cityName)) {
                         City city = new City(jsonObject);
