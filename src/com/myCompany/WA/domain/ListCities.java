@@ -5,29 +5,20 @@ import java.util.Comparator;
 
 public class ListCities {
 
+    ArrayList<City> listCities = new ArrayList<>();
+    CheckListCities check = new CheckListCities();
 
-    ArrayList <City> cities = new ArrayList<>();
-
-    public void setListCities(City city) {
-        cities.add(city);
-        Comparator<City> comparator = Comparator.comparing(City::getCityName);
-        cities.sort(comparator);
+    public void addCity(City city) {
+        if (check.isNoCityInList(city, this)){
+            listCities.add(city);
+            Comparator<City> comparator = Comparator.comparing(City::getCityName);
+            listCities.sort(comparator);
+        }
     }
 
-    public String getListCities() {
-        String listCities = "";
-        int i;
-        for (i=0; i < cities.size(); i++) {
-            listCities += (i + 1) + ". " + cities.get(i).getCityCountry() + "\n";
-        }
+    public ArrayList<City> getListCities() {
         return listCities;
     }
 
-    public String getCityWeather (int numberCity) {
-        return cities.get(numberCity - 1).getWeather();
-    }
 
-    public ArrayList getCities(){
-        return cities;
-    }
 }

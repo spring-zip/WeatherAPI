@@ -3,16 +3,16 @@ package com.myCompany.WA.domain;
 public class CheckListCities {
 
     public boolean isListEmpty(ListCities cities) {
-        return cities.getCities().size() == 0;
+        return cities.getListCities().size() == 0;
     }
 
     public boolean isIndexOutOfBounds(int index, ListCities cities) {
-        return index < 1 || index > cities.getCities().size();
+        return index < 1 || index > cities.getListCities().size();
     }
 
     public boolean isNoCityInList (City city,ListCities cities) {
-        for (int i = 0; i < cities.getCities().size(); i++) {
-            City name = (City) cities.getCities().get(i);
+        for (int i = 0; i < cities.getListCities().size(); i++) {
+            City name = cities.getListCities().get(i);
             if (name.getCityName().equals(city.getCityName())) {
                 return false;
             }
