@@ -26,7 +26,7 @@ public class WeatherProgram {
                     break;
                 }
 
-                if (cityName.equals("list")) {
+                if (cityName.equals("list"))  {
                     view.listCities(cities);
                 } else if (!checkConnection.isNetworkReachable()) {
                     System.out.println("Нет подключения к интернету\n");
