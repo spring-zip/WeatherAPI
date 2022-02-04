@@ -1,7 +1,7 @@
 package com.myCompany.WA;
 
 
-import com.myCompany.WA.domain.WeatherProgram;
+import com.myCompany.WA.program.WeatherProgram;
 
 public class WApp {
     public static void main(String[] args) {

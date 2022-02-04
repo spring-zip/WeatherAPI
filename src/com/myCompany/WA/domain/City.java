@@ -10,19 +10,15 @@ public class City {
     private int pressure;
     private int wind;
 
-    public City(GetParseJson jsonCity) {
-        this.setWeather(jsonCity);
-    }
-
-    private void setWeather(GetParseJson jsonCity) {
-
-            city = jsonCity.city;
-            country = jsonCity.country;
-            tempInfo = jsonCity.tempInfo;
-            tempFeels = jsonCity.tempFeels;
-            humidity = jsonCity.humidity;
-            pressure = jsonCity.pressure;
-            wind =  jsonCity.wind;
+    public City(String city, String country, double tempInfo,
+                double tempFeels, int humidity, int pressure, int wind) {
+        this.city = city;
+        this.country = country;
+        this.tempInfo = tempInfo;
+        this.tempFeels = tempFeels;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.wind =  wind;
     }
 
     public String getCityName(){

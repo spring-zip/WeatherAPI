@@ -1,24 +1,24 @@
-package com.myCompany.WA.domain;
+package com.myCompany.WA.repository;
+
+import com.myCompany.WA.domain.City;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class ListCities {
+public class CitiesRepository {
 
     ArrayList<City> listCities = new ArrayList<>();
-    CheckListCities check = new CheckListCities();
 
     public void addCity(City city) {
-        if (check.isNoCityInList(city, this)){
             listCities.add(city);
             Comparator<City> comparator = Comparator.comparing(City::getCityName);
             listCities.sort(comparator);
-        }
     }
 
     public ArrayList<City> getListCities() {
         return listCities;
     }
-
-
+    public City getCityByIndex(int index) {
+        return listCities.get(index);
+    }
 }
