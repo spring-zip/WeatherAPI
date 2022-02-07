@@ -1,6 +1,7 @@
 package com.myCompany.WA.controller;
 
 import com.myCompany.WA.domain.City;
+import com.myCompany.WA.domain.NoNetworkException;
 import com.myCompany.WA.repository.CheckCitiesRepository;
 import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.repository.WeatherService;
@@ -13,45 +14,26 @@ public class Controller {
     CheckCitiesRepository check = new CheckCitiesRepository();
     Scanner input = new Scanner(System.in);
 
-    public Scanner inputData(){
+    public Scanner inputData() {
         return input;
     }
 
-
-    public int getIndexCityByName(String cityName, CitiesRepository listCities) {
-        int index = 0;
-
-        if (check.isNoCityInList(cityName, listCities)) {
-            switch (service.parseJson(cityName)) {
-                case WeatherService.DISCONNECT:
-                    index = -3;
-                    return index;
-                case WeatherService.NO_CITY:
-                    index = -2;
-                    return index;
-                case WeatherService.REQUEST_ERROR:
-                    index = -1;
-                    return index;
-                case WeatherService.INFORMATION_RECEIVED:
-                    City newCity = new City(service.city, service.country,
-                            service.tempInfo, service.tempFeels, service.humidity,
-                            service.pressure, service.wind);
-                    listCities.addCity(newCity);
-
-                    /*newCity.getCityName() Сделано дополнительно, т.к. API погоды
-                      возвращает JSON и для городов написанных латинецей*/
-                    index = getIndexInLocalBase(newCity.getCityName(), listCities);
-                    break;
+    public City getCityByName(String cityName, CitiesRepository listCities) throws NoNetworkException {
+        try {
+            if (check.isNoCityInList(cityName, listCities)) {
+                listCities.addCity(service.createCity(cityName));
             }
-        } else {
+            cityName = service.createCity(cityName).getCityName(); /// нужно т.к. API погоды работает и с латинскими буквами
+            int index;
             index = getIndexInLocalBase(cityName, listCities);
+            return listCities.getCityByIndex(index);
+        } catch (NoNetworkException e){
+            throw e;
         }
-        return index;
-
     }
 
-    int getIndexInLocalBase(String cityName, CitiesRepository listCities) {
-        int index = 0;
+    private int getIndexInLocalBase (String cityName, CitiesRepository listCities) throws IndexOutOfBoundsException {
+        int index = -1;
         for (int i = 0; i < listCities.getListCities().size(); i++) {
             City city = listCities.getListCities().get(i);
             if (city.getCityName().equals(cityName)) {
@@ -60,5 +42,13 @@ public class Controller {
             }
         }
         return index;
+    }
+
+    public City getCityByIndex(int index, CitiesRepository listCities) throws NoNetworkException{
+        try {
+            return listCities.getCityByIndex(index);
+        } catch (NoNetworkException e) {
+            throw e;
+        }
     }
 }

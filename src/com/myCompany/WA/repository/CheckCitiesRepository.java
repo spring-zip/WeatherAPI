@@ -1,24 +1,23 @@
 package com.myCompany.WA.repository;
 
 import com.myCompany.WA.domain.City;
+import com.myCompany.WA.domain.NoNetworkException;
 
 public class CheckCitiesRepository {
 
-    public boolean isListEmpty(CitiesRepository cities) {
-        return cities.getListCities().size() == 0;
+    WeatherService service = new WeatherService(); /// нужно т.к. API погоды работает и с латинскими буквами
+
+    public boolean isListEmpty(CitiesRepository listCities) {
+        return listCities.getListCities().size() == 0;
     }
 
-    public boolean isIndexOutOfBounds(int index, CitiesRepository cities) {
-        return index < 0 || index >= cities.getListCities().size();
-    }
 
-    public boolean isNoCityInList (String cityName, CitiesRepository cities) {
-        WeatherService service = new WeatherService(); ///Сделано дополнительно, т.к. API погоды возвращает JSON и для городов написанных латинецей
-        service.parseJson(cityName); ///Сделано дополнительно, т.к. API погоды возвращает JSON и для городов написанных латинецей
-        cityName = service.city; ///Сделано дополнительно, т.к. API погоды возвращает JSON и для городов написанных латинецей
+    public boolean isNoCityInList (String cityName, CitiesRepository listCities) throws NoNetworkException {
 
-        for (int i = 0; i < cities.getListCities().size(); i++) {
-            City city = cities.getListCities().get(i);
+        cityName = service.createCity(cityName).getCityName(); /// нужно т.к. API погоды работает и с латинскими буквами
+
+        for (int i = 0; i < listCities.getListCities().size(); i++) {
+            City city = listCities.getListCities().get(i);
             if (city.getCityName().equals(cityName)) {
                 return false;
             }
