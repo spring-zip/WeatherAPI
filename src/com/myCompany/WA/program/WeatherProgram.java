@@ -1,7 +1,7 @@
 package com.myCompany.WA.program;
 
 import com.myCompany.WA.controller.Controller;
-import com.myCompany.WA.domain.NoNetworkException;
+import com.myCompany.WA.domain.WeatherProgramException;
 import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.view.WeatherView;
 
@@ -24,7 +24,7 @@ public class WeatherProgram {
 
                 try {
                     view.showCityWeather(controller.getCityByIndex(historyNumber, listCities));
-                } catch (NoNetworkException e) {
+                } catch (WeatherProgramException e) {
                     System.out.println(e.getMessage());
                 }
 
@@ -42,7 +42,7 @@ public class WeatherProgram {
                 } else {
                     try {
                         view.showCityWeather(controller.getCityByName(inputString, listCities));
-                    } catch (NoNetworkException e) {
+                    } catch (WeatherProgramException e) {
                         System.out.println(e.getMessage());
                     }
                 }

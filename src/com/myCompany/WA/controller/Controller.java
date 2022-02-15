@@ -1,7 +1,7 @@
 package com.myCompany.WA.controller;
 
 import com.myCompany.WA.domain.City;
-import com.myCompany.WA.domain.NoNetworkException;
+import com.myCompany.WA.domain.WeatherProgramException;
 import com.myCompany.WA.repository.CheckCitiesRepository;
 import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.repository.WeatherService;
@@ -18,18 +18,13 @@ public class Controller {
         return input;
     }
 
-    public City getCityByName(String cityName, CitiesRepository listCities) throws NoNetworkException {
-        try {
+    public City getCityByName(String cityName, CitiesRepository listCities) throws WeatherProgramException {
             if (check.isNoCityInList(cityName, listCities)) {
-                listCities.addCity(service.createCity(cityName));
+                listCities.addCity(service.getCityFromRemoteRepository(cityName));
             }
-            cityName = service.createCity(cityName).getCityName(); /// нужно т.к. API погоды работает и с латинскими буквами
             int index;
             index = getIndexInLocalBase(cityName, listCities);
             return listCities.getCityByIndex(index);
-        } catch (NoNetworkException e){
-            throw e;
-        }
     }
 
     private int getIndexInLocalBase (String cityName, CitiesRepository listCities) throws IndexOutOfBoundsException {
@@ -44,11 +39,7 @@ public class Controller {
         return index;
     }
 
-    public City getCityByIndex(int index, CitiesRepository listCities) throws NoNetworkException{
-        try {
-            return listCities.getCityByIndex(index);
-        } catch (NoNetworkException e) {
-            throw e;
-        }
+    public City getCityByIndex(int index, CitiesRepository listCities) throws WeatherProgramException {
+        return listCities.getCityByIndex(index);
     }
 }

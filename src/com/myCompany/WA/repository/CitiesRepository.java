@@ -1,14 +1,15 @@
 package com.myCompany.WA.repository;
 
 import com.myCompany.WA.domain.City;
-import com.myCompany.WA.domain.NoNetworkException;
+import com.myCompany.WA.domain.WeatherProgramException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Comparator;
 
 public class CitiesRepository {
 
-    private ArrayList<City> listCities = new ArrayList<>();
+    private List<City> listCities = new ArrayList<>();
 
     public void addCity(City city) {
             listCities.add(city);
@@ -20,13 +21,13 @@ public class CitiesRepository {
         return listCities;
     }
 
-    public City getCityByIndex(int index) throws NoNetworkException {
+    public City getCityByIndex(int index) throws WeatherProgramException {
         try {
             return listCities.get(index);
         } catch (NullPointerException e) {
-            throw new NoNetworkException("Список истории запросов пуст.");
+            throw new WeatherProgramException("Список истории запросов пуст.");
         } catch (IndexOutOfBoundsException e) {
-            throw new NoNetworkException("Введён не верный индекс города. В истории запросов такого города нет.");
+            throw new WeatherProgramException("Введён не верный индекс города. В истории запросов такого города нет.");
         }
     }
 }

@@ -1,11 +1,9 @@
 package com.myCompany.WA.view;
 
-import com.myCompany.WA.repository.CheckCitiesRepository;
 import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.domain.City;
 
 public class WeatherView {
-    CheckCitiesRepository check = new CheckCitiesRepository();
 
     public void start (){
         System.out.println("\nДля выхода введите finish.\n" +
@@ -24,16 +22,17 @@ public class WeatherView {
     }
 
     public void showHistoryRequestCities(CitiesRepository listCities) {
-        if (check.isListEmpty(listCities)){
-            System.out.println("Список истории запросов пуст.");
-        } else {
-            String requestHistory = "";
+        try {
+            StringBuilder requestHistory = new StringBuilder();
             int i;
             for (i = 0; i < listCities.getListCities().size(); i++) {
                 City city = listCities.getListCities().get(i);
-                requestHistory += (i+1) + ". " + "Город: " + city.getCityName() + ". Код страны: " + city.getCountryName() + "\n";
+                requestHistory.append(i + 1).append(". ").append("Город: ").append(city.getCityName()).
+                        append(". Код страны: ").append(city.getCountryName()).append("\n");
             }
             System.out.println(requestHistory);
+        } catch (NullPointerException e) {
+            System.out.println("Список истории запросов пуст.");
         }
     }
 }

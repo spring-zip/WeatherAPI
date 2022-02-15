@@ -2,7 +2,7 @@ package com.myCompany.WA.repository;
 
 import com.myCompany.WA.domain.City;
 import com.myCompany.WA.domain.ConnectionAvailability;
-import com.myCompany.WA.domain.NoNetworkException;
+import com.myCompany.WA.domain.WeatherProgramException;
 
 import org.json.JSONException;
 
@@ -17,7 +17,7 @@ public class WeatherService {
 
     private ConnectionAvailability netWork = new ConnectionAvailability();
 
-    private String getUrlContent(String cityName) throws NoNetworkException {
+    private String getUrlContent(String cityName) throws WeatherProgramException {
         if (netWork.isNetworkReachable()) {
             try {
                 StringBuilder content = new StringBuilder();
@@ -36,14 +36,14 @@ public class WeatherService {
                     return content.toString();
 
             } catch (IOException e){
-                throw new NoNetworkException("Такой город не был найден!");
+                throw new WeatherProgramException("Такой город не был найден!");
             }
         } else {
-            throw new NoNetworkException("Нет подключения к интернету!");
+            throw new WeatherProgramException("Нет подключения к интернету!");
         }
     }
 
-    private City convertJsonToCity(String json) throws NoNetworkException {
+    private City convertJsonToCity(String json) throws WeatherProgramException {
 
         City newCity;
         org.json.JSONObject obj = new org.json.JSONObject(json);
@@ -58,11 +58,11 @@ public class WeatherService {
 
             return newCity;
         } catch (JSONException e){
-            throw new NoNetworkException("Ошибка: ответ сервера не в поном объеме или содержит ошибку");
+            throw new WeatherProgramException("Ошибка: ответ сервера не в поном объеме или содержит ошибку");
         }
     }
 
-    public City createCity(String cityName) throws NoNetworkException {
+    public City getCityFromRemoteRepository(String cityName) throws WeatherProgramException {
             return convertJsonToCity(getUrlContent(cityName));
     }
 }
