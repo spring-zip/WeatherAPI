@@ -9,16 +9,17 @@ import java.util.Comparator;
 
 public class CitiesRepository {
 
+    private WeatherService service = new WeatherService();
     private List<City> listCities = new ArrayList<>();
 
-    public void addCity(City city) {
-            listCities.add(city);
-            Comparator<City> comparator = Comparator.comparing(City::getCityName);
-            listCities.sort(comparator);
+    public void addCity(String cityName) throws WeatherProgramException {
+        listCities.add(service.getCityFromRemoteRepository(cityName));
+        Comparator<City> comparator = Comparator.comparing(City::getCityName);
+        listCities.sort(comparator);
     }
 
     public ArrayList<City> getListCities() {
-        return listCities;
+        return (ArrayList<City>) listCities;
     }
 
     public City getCityByIndex(int index) throws WeatherProgramException {
@@ -29,5 +30,36 @@ public class CitiesRepository {
         } catch (IndexOutOfBoundsException e) {
             throw new WeatherProgramException("Введён не верный индекс города. В истории запросов такого города нет.");
         }
+    }
+
+    public City getCityByName(String cityName) throws WeatherProgramException {
+        if (isNoCityInList(cityName)) {
+            addCity(cityName);
+        }
+        int index;
+        index = getIndexInLocalBase(cityName);
+        return getCityByIndex(index);
+    }
+
+    private int getIndexInLocalBase (String cityName) throws IndexOutOfBoundsException {
+        int index = -1;
+        for (int i = 0; i < listCities.size(); i++) {
+            City city = listCities.get(i);
+            if (city.getCityName().equals(cityName)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    public boolean isNoCityInList (String cityName) {
+
+        for (City city : listCities) {
+            if (city.getCityName().equals(cityName)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

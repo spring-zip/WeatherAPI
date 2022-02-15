@@ -1,6 +1,5 @@
 package com.myCompany.WA.view;
 
-import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.domain.City;
 
 public class WeatherView {
@@ -21,18 +20,7 @@ public class WeatherView {
                 "\nСкорость ветра: " + city.getWind() + " м/с");
     }
 
-    public void showHistoryRequestCities(CitiesRepository listCities) {
-        try {
-            StringBuilder requestHistory = new StringBuilder();
-            int i;
-            for (i = 0; i < listCities.getListCities().size(); i++) {
-                City city = listCities.getListCities().get(i);
-                requestHistory.append(i + 1).append(". ").append("Город: ").append(city.getCityName()).
-                        append(". Код страны: ").append(city.getCountryName()).append("\n");
-            }
-            System.out.println(requestHistory);
-        } catch (NullPointerException e) {
-            System.out.println("Список истории запросов пуст.");
-        }
+    public void showHistoryRequestCities(String historyRequest) {
+        System.out.println(historyRequest);
     }
 }

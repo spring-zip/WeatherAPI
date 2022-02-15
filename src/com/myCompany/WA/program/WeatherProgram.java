@@ -2,7 +2,6 @@ package com.myCompany.WA.program;
 
 import com.myCompany.WA.controller.Controller;
 import com.myCompany.WA.domain.WeatherProgramException;
-import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.view.WeatherView;
 
 public class WeatherProgram {
@@ -14,7 +13,6 @@ public class WeatherProgram {
 
         WeatherView view = new WeatherView();
         Controller controller = new Controller();
-        CitiesRepository listCities = new CitiesRepository();
 
         while (true) {
             view.start();
@@ -23,7 +21,7 @@ public class WeatherProgram {
                 int historyNumber = controller.inputData().nextInt() - 1;
 
                 try {
-                    view.showCityWeather(controller.getCityByIndex(historyNumber, listCities));
+                    view.showCityWeather(controller.getCityByIndex(historyNumber));
                 } catch (WeatherProgramException e) {
                     System.out.println(e.getMessage());
                 }
@@ -37,11 +35,11 @@ public class WeatherProgram {
 
                 if (inputString.equals(HISTORY))  {
 
-                    view.showHistoryRequestCities(listCities);
+                    view.showHistoryRequestCities(controller.getHistoryRequestCities());
 
                 } else {
                     try {
-                        view.showCityWeather(controller.getCityByName(inputString, listCities));
+                        view.showCityWeather(controller.getCityByName(inputString));
                     } catch (WeatherProgramException e) {
                         System.out.println(e.getMessage());
                     }
