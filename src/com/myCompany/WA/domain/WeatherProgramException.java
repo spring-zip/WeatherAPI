@@ -1,12 +1,10 @@
 package com.myCompany.WA.domain;
 
-import java.io.IOException;
-
-public class NoNetworkException extends IOException {
+public class WeatherProgramException extends Exception {
 
     private String message;
 
-    public NoNetworkException (String message){
+    public WeatherProgramException(String message){
         this.message = message;
     }
 
