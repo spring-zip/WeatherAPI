@@ -1,7 +1,6 @@
 package com.myCompany.WA.program;
 
 import com.myCompany.WA.controller.Controller;
-import com.myCompany.WA.domain.WeatherProgramException;
 import com.myCompany.WA.view.WeatherView;
 
 public class WeatherProgram {
@@ -20,11 +19,8 @@ public class WeatherProgram {
             if (controller.inputData().hasNextInt()) {
                 int historyNumber = controller.inputData().nextInt() - 1;
 
-                try {
-                    view.showCityWeather(controller.getCityByIndex(historyNumber));
-                } catch (WeatherProgramException e) {
-                    System.out.println(e.getMessage());
-                }
+                view.showCityWeather(controller.getCityByIndex(historyNumber));
+
             } else {
                 String inputString = controller.inputData().next();
 
