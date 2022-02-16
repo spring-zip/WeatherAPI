@@ -16,7 +16,7 @@ public class Controller {
         return input;
     }
 
-    public City getCityByIndex(int index) throws WeatherProgramException {
+    public City getCityByIndex(int index) {
         try {
             return repository.getCityByIndex(index);
         } catch (WeatherProgramException e) {
