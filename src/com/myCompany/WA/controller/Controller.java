@@ -28,8 +28,8 @@ public class Controller {
             return "Список истории запросов пуст.";
         } else {
             StringBuilder requestHistory = new StringBuilder();
-            int i;
-            for (i = 0; i < listCities.getListCities().size(); i++) {
+
+            for (int i = 0; i < listCities.getListCities().size(); i++) {
                 City city = listCities.getListCities().get(i);
                 requestHistory.append(i + 1).append(". ").append("Город: ").append(city.getCityName()).
                         append(". Код страны: ").append(city.getCountryName()).append("\n");
