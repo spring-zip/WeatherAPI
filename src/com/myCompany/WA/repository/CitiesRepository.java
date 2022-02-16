@@ -12,14 +12,14 @@ public class CitiesRepository {
     private WeatherService service = new WeatherService();
     private List<City> listCities = new ArrayList<>();
 
-    public void addCity(String cityName) throws WeatherProgramException {
-        listCities.add(service.getCityFromRemoteRepository(cityName));
-        Comparator<City> comparator = Comparator.comparing(City::getCityName);
-        listCities.sort(comparator);
+    private void addCity(City newCity) {
+        listCities.add(newCity);
     }
 
-    public ArrayList<City> getListCities() {
-        return (ArrayList<City>) listCities;
+    public List<City> getListCities() {
+        Comparator<City> comparator = Comparator.comparing(City::getCityName);
+        listCities.sort(comparator);
+        return listCities;
     }
 
     public City getCityByIndex(int index) throws WeatherProgramException {
@@ -33,8 +33,9 @@ public class CitiesRepository {
     }
 
     public City getCityByName(String cityName) throws WeatherProgramException {
-        if (isNoCityInList(cityName)) {
-            addCity(cityName);
+        if (!isCityInList(cityName)) {
+            City newCity = service.getCity(cityName);
+            addCity(newCity);
         }
         int index;
         index = getIndexInLocalBase(cityName);
@@ -53,13 +54,13 @@ public class CitiesRepository {
         return index;
     }
 
-    public boolean isNoCityInList (String cityName) {
+    private boolean isCityInList(String cityName) {
 
         for (City city : listCities) {
             if (city.getCityName().equals(cityName)) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
