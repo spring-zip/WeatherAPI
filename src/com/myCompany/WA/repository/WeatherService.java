@@ -62,7 +62,7 @@ public class WeatherService {
         }
     }
 
-    public City getCityFromRemoteRepository(String cityName) throws WeatherProgramException {
+    public City getCity(String cityName) throws WeatherProgramException {
             return convertJsonToCity(getUrlContent(cityName));
     }
 }

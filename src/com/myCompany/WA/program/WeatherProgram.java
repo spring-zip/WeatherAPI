@@ -25,7 +25,6 @@ public class WeatherProgram {
                 } catch (WeatherProgramException e) {
                     System.out.println(e.getMessage());
                 }
-
             } else {
                 String inputString = controller.inputData().next();
 
@@ -34,15 +33,9 @@ public class WeatherProgram {
                 }
 
                 if (inputString.equals(HISTORY))  {
-
                     view.showHistoryRequestCities(controller.getHistoryRequestCities());
-
                 } else {
-                    try {
-                        view.showCityWeather(controller.getCityByName(inputString));
-                    } catch (WeatherProgramException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    view.showCityWeather(controller.getCityByName(inputString));
                 }
             }
         }
