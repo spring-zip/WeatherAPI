@@ -1,7 +1,10 @@
 package com.myCompany.WA.program;
 
-import com.myCompany.WA.controller.Controller;
+import com.myCompany.WA.domain.WeatherProgramException;
+import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.view.WeatherView;
+
+import java.util.Scanner;
 
 public class WeatherProgram {
 
@@ -10,28 +13,36 @@ public class WeatherProgram {
 
     public void start() {
 
+        CitiesRepository repository = new CitiesRepository();
         WeatherView view = new WeatherView();
-        Controller controller = new Controller();
+        Scanner input = new Scanner(System.in);
 
         while (true) {
             view.start();
 
-            if (controller.inputData().hasNextInt()) {
-                int historyNumber = controller.inputData().nextInt() - 1;
+            if (input.hasNextInt()) {
+                int historyNumber = input.nextInt() - 1;
 
-                view.showCityWeather(controller.getCityByIndex(historyNumber));
-
+                try {
+                    view.showCityWeather(repository.getCityByIndex(historyNumber));
+                } catch (WeatherProgramException e) {
+                    view.showException(e);
+                }
             } else {
-                String inputString = controller.inputData().next();
+                String inputString = input.next();
 
                 if(inputString.equals(EXIT)){
                     break;
                 }
 
                 if (inputString.equals(HISTORY))  {
-                    view.showHistoryRequestCities(controller.getHistoryRequestCities());
+                    view.showHistoryRequestCities(repository.getListCities());
                 } else {
-                    view.showCityWeather(controller.getCityByName(inputString));
+                    try {
+                        view.showCityWeather(repository.getCityByName(inputString));
+                    } catch (WeatherProgramException e) {
+                        view.showException(e);
+                    }
                 }
             }
         }

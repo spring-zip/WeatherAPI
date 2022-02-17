@@ -33,13 +33,15 @@ public class CitiesRepository {
     }
 
     public City getCityByName(String cityName) throws WeatherProgramException {
-        if (!isCityInList(cityName)) {
+        if (isCityInList(cityName)) {
+            int index;
+            index = getIndexInLocalBase(cityName);
+            return getCityByIndex(index);
+        } else {
             City newCity = service.getCity(cityName);
             addCity(newCity);
+            return newCity;
         }
-        int index;
-        index = getIndexInLocalBase(cityName);
-        return getCityByIndex(index);
     }
 
     private int getIndexInLocalBase (String cityName) throws IndexOutOfBoundsException {
