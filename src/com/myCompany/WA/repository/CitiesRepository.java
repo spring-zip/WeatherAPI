@@ -34,9 +34,7 @@ public class CitiesRepository {
 
     public City getCityByName(String cityName) throws WeatherProgramException {
         if (isCityInList(cityName)) {
-            int index;
-            index = getIndexInLocalBase(cityName);
-            return getCityByIndex(index);
+            return getCityInLocalBase(cityName);
         } else {
             City newCity = service.getCity(cityName);
             addCity(newCity);
@@ -44,8 +42,9 @@ public class CitiesRepository {
         }
     }
 
-    private int getIndexInLocalBase (String cityName) throws IndexOutOfBoundsException {
+    private City getCityInLocalBase(String cityName) {
         int index = -1;
+
         for (int i = 0; i < listCities.size(); i++) {
             City city = listCities.get(i);
             if (city.getCityName().equals(cityName)) {
@@ -53,11 +52,10 @@ public class CitiesRepository {
                 break;
             }
         }
-        return index;
+        return listCities.get(index);
     }
 
     private boolean isCityInList(String cityName) {
-
         for (City city : listCities) {
             if (city.getCityName().equals(cityName)) {
                 return true;
