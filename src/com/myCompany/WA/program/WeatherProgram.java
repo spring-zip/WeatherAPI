@@ -4,10 +4,13 @@ import com.myCompany.WA.domain.WeatherProgramException;
 import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.view.WeatherView;
 
+import java.util.Scanner;
+
 public class WeatherProgram {
 
     private static final String EXIT = "finish";
     private static final String HISTORY = "list";
+    private static final String HISTORY_NUMBER = "historyNumber";
 
     CitiesRepository repository = new CitiesRepository();
     WeatherView view = new WeatherView();
@@ -17,25 +20,28 @@ public class WeatherProgram {
         while (true) {
             view.start();
 
-            if (view.inputData().hasNextInt()) {
-                int historyNumber = view.inputData().nextInt() - 1;
-                getCityByHistoryNumber(historyNumber);
+            String inputData = parseData(view.inputData());
 
-            } else {
-                String inputString = view.inputData().next();
+            if (inputData.equals(EXIT)) {
+                break;
+            }
 
-                if(inputString.equals(EXIT)){
-                    break;
-                }
-
-                if (inputString.equals(HISTORY))  {
-                    view.showHistoryRequestCities(repository.getListCities());
-                } else {
-                    getCityByName(inputString);
-                }
+            switch (inputData) {
+                case HISTORY_NUMBER -> getCityByHistoryNumber(view.inputData().nextInt() - 1);
+                case HISTORY -> view.showHistoryRequestCities(repository.getListCities());
+                default -> getCityByName(inputData);
             }
         }
     }
+
+    private String parseData(Scanner input) {
+        if (input.hasNextInt()){
+            return HISTORY_NUMBER;
+        } else {
+            return input.next();
+        }
+    }
+
     private void getCityByHistoryNumber(int historyNumber){
         try {
             view.showCityWeather(repository.getCityByIndex(historyNumber));
