@@ -1,40 +1,53 @@
 package com.myCompany.WA.program;
 
-import com.myCompany.WA.controller.Controller;
+import com.myCompany.WA.domain.WeatherProgramException;
+import com.myCompany.WA.repository.CitiesRepository;
 import com.myCompany.WA.view.WeatherView;
 
 public class WeatherProgram {
 
     private static final String EXIT = "finish";
     private static final String HISTORY = "list";
+    private static final String HISTORY_NUMBER = "historyNumber";
+
+    CitiesRepository repository = new CitiesRepository();
+    WeatherView view = new WeatherView();
+
 
     public void start() {
-
-        WeatherView view = new WeatherView();
-        Controller controller = new Controller();
 
         while (true) {
             view.start();
 
-            if (controller.inputData().hasNextInt()) {
-                int historyNumber = controller.inputData().nextInt() - 1;
+            InputData inputData = new InputData(view.inputData());
+            String input = inputData.getCommand();
 
-                view.showCityWeather(controller.getCityByIndex(historyNumber));
-
-            } else {
-                String inputString = controller.inputData().next();
-
-                if(inputString.equals(EXIT)){
-                    break;
+            switch (input) {
+                case EXIT -> {
+                    return;
                 }
-
-                if (inputString.equals(HISTORY))  {
-                    view.showHistoryRequestCities(controller.getHistoryRequestCities());
-                } else {
-                    view.showCityWeather(controller.getCityByName(inputString));
-                }
+                case HISTORY_NUMBER -> getCityByHistoryNumber(inputData.getHistoryNumber() - 1);
+                case HISTORY -> view.showHistoryRequestCities(repository.getListCities());
+                default -> getCityByName(input);
             }
         }
     }
+
+    private void getCityByHistoryNumber(int historyNumber){
+        try {
+            view.showCityWeather(repository.getCityByIndex(historyNumber));
+        } catch (WeatherProgramException e) {
+            view.showException(e);
+        }
+    }
+
+    private void getCityByName(String cityName){
+        try {
+            view.showCityWeather(repository.getCityByName(cityName));
+        } catch (WeatherProgramException e) {
+            view.showException(e);
+        }
+    }
+
 }
 

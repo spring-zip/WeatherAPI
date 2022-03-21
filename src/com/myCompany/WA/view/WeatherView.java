@@ -1,15 +1,27 @@
 package com.myCompany.WA.view;
 
 import com.myCompany.WA.domain.City;
+import com.myCompany.WA.domain.WeatherProgramException;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class WeatherView {
+
+    Scanner input = new Scanner(System.in);
+
+    public Scanner inputData() {
+        return input;
+    }
 
     public void start (){
         System.out.println("\nДля выхода введите finish.\n" +
                 "Для вывода истории запросов городов введите list. \n" +
                 "Введите название города: ");
+    }
+
+    public void showException(WeatherProgramException e) {
+        System.out.println(e.getMessage());
     }
 
     public void showCityWeather(City city) {

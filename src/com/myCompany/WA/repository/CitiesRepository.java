@@ -33,34 +33,21 @@ public class CitiesRepository {
     }
 
     public City getCityByName(String cityName) throws WeatherProgramException {
-        if (!isCityInList(cityName)) {
+        try {
+            return getCityInLocalBase(cityName);
+        } catch (WeatherProgramException e) {
             City newCity = service.getCity(cityName);
             addCity(newCity);
+            return newCity;
         }
-        int index;
-        index = getIndexInLocalBase(cityName);
-        return getCityByIndex(index);
     }
 
-    private int getIndexInLocalBase (String cityName) throws IndexOutOfBoundsException {
-        int index = -1;
-        for (int i = 0; i < listCities.size(); i++) {
-            City city = listCities.get(i);
-            if (city.getCityName().equals(cityName)) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
-    private boolean isCityInList(String cityName) {
-
+    private City getCityInLocalBase(String cityName) throws WeatherProgramException {
         for (City city : listCities) {
             if (city.getCityName().equals(cityName)) {
-                return true;
+                return city;
             }
         }
-        return false;
+        throw new WeatherProgramException("Город в локальной базе данных не найден");
     }
 }
